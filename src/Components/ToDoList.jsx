@@ -4,6 +4,9 @@ import { MdDeleteSweep } from "react-icons/md";
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
 import {
   getFirestore,
   collection,
@@ -13,25 +16,36 @@ import {
   doc,
 } from "firebase/firestore";
 
-function ToDoList() {
-  const firebaseConfig = {
-    apiKey: "AIzaSyAVgTWP4PnjexwOcrrxcgXWMNyDXaNtnTs",
-    authDomain: "todo-d508b.firebaseapp.com",
-    projectId: "todo-d508b",
-    storageBucket: "todo-d508b.appspot.com",
-    messagingSenderId: "919777973523",
-    appId: "1:919777973523:web:b01ff9f22f34d49e46f6e6",
-    measurementId: "G-3QZSTEWCV8",
-  };
+import { firebaseConfig } from "../Script";
 
+function ToDoList() {
   const app = initializeApp(firebaseConfig);
+  const navigate = useNavigate();
   const analytics = getAnalytics(app);
   const db = getFirestore(app);
   const text = useRef(null);
   const [todoList, setTodoList] = useState([]);
+  const [user, setUser] = useState(null);
 
-  const fetchData = async () => {
-    const todoCollection = collection(db, "todo_items");
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+
+      if (user) {
+        fetchData(user.uid);
+      } else {
+        // If user is not authenticated, clear the to-do list
+        navigate("/auth");
+        setTodoList([]);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [app]);
+
+  const fetchData = async (userId) => {
+    const todoCollection = collection(db, `users/${userId}/todo_items`);
     const querySnapshot = await getDocs(todoCollection);
     const todos = querySnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -49,12 +63,20 @@ function ToDoList() {
     event.preventDefault();
 
     try {
-      const docRef = await addDoc(collection(db, "todo_items"), {
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      const userId = user.uid;
+      const todoCollection = collection(db, `users/${userId}/todo_items`);
+
+      const docRef = await addDoc(todoCollection, {
         text: text.current.value,
         status: "active",
       });
 
-      fetchData();
+      fetchData(userId);
       text.current.value = "";
       console.log("Document written with ID:", docRef.id);
     } catch (error) {
@@ -64,8 +86,14 @@ function ToDoList() {
 
   const deleteItem = async (id) => {
     try {
-      await deleteDoc(doc(db, "todo_items", id));
-      fetchData();
+      if (!user) {
+        console.error("User not authenticated");
+        return;
+      }
+
+      const userId = user.uid;
+      await deleteDoc(doc(db, `users/${userId}/todo_items`, id));
+      fetchData(userId);
       console.log("Document deleted with ID:", id);
     } catch (error) {
       console.error("Error deleting document:", error);
@@ -102,23 +130,21 @@ function ToDoList() {
             </div>
           </div>
 
-          <div className=" flex flex-wrap px-5 md:px-0 lg:px-10 relative md:w-[100%]  gap-3 md:gap-4 lg:gap-10">
-            {todoList.map((todo, index) => (
-              <>
-                <div className="bg-green-300 w-[48%] min-w-[140px] md:min-w-[180px] lg:min-w-[200px] md:w-[40%] lg:w-[22%] rounded-lg mt-16 md:mt-10 p-16 relative hover:border-gray-300 shadow-md hover:shadow-none">
-                  <span
-                    key={todo.id}
-                    className=" flex flex-col justify-center items-center "
-                  >
-                    {todo.text}
-                  </span>
-                  <MdDeleteSweep
-                    size={20}
-                    className="absolute bottom-0 right-0 m-1 text-black  cursor-pointer hover:text-red-500"
-                    onClick={() => deleteItem(todo.id)}
-                  />
-                </div>
-              </>
+          <div className="flex flex-wrap px-5 md:px-0 lg:px-10 relative md:w-[100%]  gap-3 md:gap-4 lg:gap-10">
+            {todoList.map((todo) => (
+              <div
+                key={todo.id}
+                className="bg-green-300 w-[48%] min-w-[140px] md:min-w-[180px] lg:min-w-[200px] md:w-[40%] lg:w-[22%] rounded-lg mt-16 md:mt-10 p-16 relative hover:border-gray-300 shadow-md hover:shadow-none"
+              >
+                <span className=" flex flex-col justify-center items-center ">
+                  {todo.text}
+                </span>
+                <MdDeleteSweep
+                  size={20}
+                  className="absolute bottom-0 right-0 m-1 text-black  cursor-pointer hover:text-red-500"
+                  onClick={() => deleteItem(todo.id)}
+                />
+              </div>
             ))}
           </div>
         </div>
