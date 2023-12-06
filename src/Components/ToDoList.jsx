@@ -36,7 +36,7 @@ function ToDoList() {
         fetchData(user.uid);
       } else {
         // If user is not authenticated, clear the to-do list
-        navigate("/auth");
+        navigate("/");
         setTodoList([]);
       }
     });
