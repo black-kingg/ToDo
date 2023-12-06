@@ -18,17 +18,8 @@ function App() {
           element={<Home />}
         />
         <Route
-          path="/auth"
-          element={<AuthPage />}
-        />
-        <Route
           path="/"
-          element={
-            <Navigate
-              to="/auth"
-              replace={true}
-            />
-          }
+          element={<AuthPage />}
         />
       </Routes>
     </BrowserRouter>
