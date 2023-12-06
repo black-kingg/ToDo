@@ -17,6 +17,7 @@ import {
 } from "firebase/firestore";
 
 import { firebaseConfig } from "../Script";
+import Navbar from "./Navbar";
 
 function ToDoList() {
   const app = initializeApp(firebaseConfig);
@@ -102,6 +103,7 @@ function ToDoList() {
 
   return (
     <>
+      <Navbar />
       <div className="bg-gray-200">
         <div className="w-screen min-h-screen justify-center items-center">
           <div

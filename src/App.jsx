@@ -21,10 +21,6 @@ function App() {
           path="/"
           element={<AuthPage />}
         />
-        <Route
-          path="/auth"
-          element={<AuthPage />}
-        />
       </Routes>
     </BrowserRouter>
   );
