@@ -41,7 +41,7 @@ function Home() {
       if (user) {
         fetchData(user.uid);
       } else {
-        navigate("/");
+        navigate("/auth");
       }
     });
 
