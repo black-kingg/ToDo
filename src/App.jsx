@@ -19,11 +19,16 @@ function App() {
         />
         <Route
           path="/auth"
-          element={<AuthPage history={history} />}
+          element={<AuthPage />}
         />
         <Route
           path="/"
-          element={<Navigate to="/auth" />}
+          element={
+            <Navigate
+              to="/auth"
+              replace={true}
+            />
+          }
         />
       </Routes>
     </BrowserRouter>
