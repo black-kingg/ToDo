@@ -18,21 +18,6 @@ function Home() {
   const [todoList, setTodoList] = useState([]);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-
-      if (user) {
-        fetchData(user.uid);
-      } else {
-        navigate("/");
-      }
-    });
-
-    return () => unsubscribe();
-  }, [app]);
-
   const fetchData = async (userId) => {
     const todoCollection = collection(db, `users/${userId}/todo_items`);
     const querySnapshot = await getDocs(todoCollection);
@@ -47,6 +32,21 @@ function Home() {
   useEffect(() => {
     fetchData();
   }, [db]);
+
+  useEffect(() => {
+    const auth = getAuth(app);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+
+      if (user) {
+        fetchData(user.uid);
+      } else {
+        navigate("/");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [app]);
 
   return (
     <>
