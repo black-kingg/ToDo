@@ -30,20 +30,27 @@ function ToDoList() {
 
   useEffect(() => {
     const auth = getAuth(app);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    let isMounted = true;
 
-      if (user) {
-        fetchData(user.uid);
-      } else {
-        // If user is not authenticated, clear the to-do list
-        navigate("/");
-        setTodoList([]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (isMounted) {
+        setUser(user);
+
+        if (user) {
+          fetchData(user.uid);
+        } else {
+          // If user is not authenticated, clear the to-do list
+          navigate("/");
+          setTodoList([]);
+        }
       }
     });
 
-    return () => unsubscribe();
-  }, [app]);
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, [app, navigate]);
 
   const fetchData = async (userId) => {
     const todoCollection = collection(db, `users/${userId}/todo_items`);
