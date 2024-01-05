@@ -17,6 +17,8 @@ const Signup = ({ setIsHidden }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const navigate = useNavigate();
+
   const handleSignup = async () => {
     try {
       const auth = getAuth(app);
