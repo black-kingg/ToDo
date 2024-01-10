@@ -1,25 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
-import { CiCirclePlus } from "react-icons/ci";
+import React, { useEffect, useRef } from "react";
+
 import { MdDeleteSweep } from "react-icons/md";
 
-import { initializeApp } from "firebase/app";
+import { app, db } from "../Firebase";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs, deleteDoc, doc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-import { app, db } from "../Firebase";
 
 import Navbar from "../Components/Navbar";
 
@@ -27,6 +15,8 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
   const navigate = useNavigate();
   const analytics = getAnalytics(app);
   const text = useRef(null);
+
+  const groupedTodoMap = new Map();
 
   useEffect(() => {
     const auth = getAuth(app);
@@ -91,6 +81,16 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   };
 
+  todoList.forEach((todo) => {
+    const dueDateKey = todo.dueDate;
+
+    if (groupedTodoMap.has(dueDateKey)) {
+      groupedTodoMap.get(dueDateKey).push(todo);
+    } else {
+      groupedTodoMap.set(dueDateKey, [todo]);
+    }
+  });
+
   return (
     <>
       <div className="bg-neutral-900 text-gray-300 w-[88%] h-screen">
@@ -100,21 +100,34 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
             <p className="text-xl font-semibold mb-4">
               Welcome, {user ? user.email : "Guest"}
             </p>
+
             <div className="flex flex-wrap px-5 md:px-0 lg:px-10 relative md:w-[100%] gap-3 md:gap-4 lg:gap-10">
-              {todoList.map((todo) => (
+              {Array.from(groupedTodoMap).map(([dueDateKey, todos]) => (
                 <div
-                  key={todo.id}
-                  className="bg-neutral-600 w-[48%] min-w-[140px] md:min-w-[180px] lg:min-w-[200px] md:w-[40%] lg:w-[22%] rounded-lg mt-16 md:mt-10 h-[200px] p-5 relative hover:border-gray-300 shadow-md hover:shadow-none"
+                  key={dueDateKey}
+                  className="flex flex-col w-[48%] md:w-[40%] lg:w-[22%] mt-16 md:mt-10 gap-4"
                 >
-                  <span className="flex flex-col space-y-2 text-gray-100">
-                    <span>{todo.text}</span>
-                    <span>{formatDate(todo.dueDate)}</span>
-                  </span>
-                  <MdDeleteSweep
-                    size={20}
-                    className="absolute bottom-0 right-0 m-1 text-black  cursor-pointer hover:text-red-500"
-                    onClick={() => deleteItem(todo.id)}
-                  />
+                  <div className="bg-neutral-600 rounded-lg p-5 hover:border-gray-300 shadow-md hover:shadow-none">
+                    <span className="text-gray-100">
+                      {formatDate(todos[0].dueDate)}
+                    </span>
+                  </div>
+                  {todos.map((todo) => (
+                    <div
+                      key={todo.id}
+                      className="bg-neutral-600 rounded-lg p-5 relative hover:border-gray-300 shadow-md hover:shadow-none"
+                    >
+                      <span className="flex flex-col space-y-2 text-gray-100">
+                        <span>{todo.text}</span>
+                        {/* You can display other todo details here */}
+                      </span>
+                      <MdDeleteSweep
+                        size={20}
+                        className="absolute bottom-0 right-0 m-1 text-black cursor-pointer hover:text-red-500"
+                        onClick={() => deleteItem(todo.id)}
+                      />
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
