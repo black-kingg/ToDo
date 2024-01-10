@@ -4,7 +4,16 @@ import { Link } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import NewTodo from "./NewTodo";
 
-export default function Sidebar({ user, setUser, fetchData, setDueDate }) {
+import { IoExitOutline } from "react-icons/io5";
+import { Button } from "@nextui-org/react";
+
+export default function Sidebar({
+  user,
+  setUser,
+  fetchData,
+  dueDate,
+  setDueDate,
+}) {
   const handleLogout = () => {
     const auth = getAuth();
 
@@ -17,7 +26,7 @@ export default function Sidebar({ user, setUser, fetchData, setDueDate }) {
       });
   };
   return (
-    <div className="bg-neutral-900 text-white w-[12%] h-screen top-0 left-0 p-4 flex flex-col place-content-between">
+    <div className="bg-neutral-800 text-white w-[12%] h-screen top-0 left-0 p-4 flex flex-col place-content-between">
       <div className="mb-6 space-y-20">
         <p className="text-3xl ">TODO</p>
         <div className="space-y-3">
@@ -31,17 +40,19 @@ export default function Sidebar({ user, setUser, fetchData, setDueDate }) {
             user={user}
             setUser={setUser}
             fetchData={fetchData}
+            dueDate={dueDate}
             setDueDate={setDueDate}
           />
         </div>
       </div>
       <div>
-        <button
+        <Button
           onClick={handleLogout}
-          className="block p-2 hover:bg-gray-700 cursor-pointer"
+          color="warning"
         >
+          <IoExitOutline />
           Logout
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -15,7 +15,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-auto h-16 relative bg-neutral-900">
+    <div className="w-auto h-16 relative bg-neutral-800">
       <div className="absolute top-3 right-5">
         <button
           onClick={handleLogout}

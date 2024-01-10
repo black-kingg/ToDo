@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 
 import { db } from "../Firebase";
@@ -22,6 +22,10 @@ function Home() {
     setTodoList(todos);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [db]);
+
   return (
     <>
       <div className="flex">
@@ -29,11 +33,14 @@ function Home() {
           user={user}
           setUser={setUser}
           fetchData={fetchData}
+          dueDate={dueDate}
           setDueDate={setDueDate}
         />
         <ToDoList
           user={user}
           setUser={setUser}
+          todoList={todoList}
+          setTodoList={setTodoList}
         />
       </div>
     </>

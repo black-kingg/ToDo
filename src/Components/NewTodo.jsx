@@ -19,13 +19,7 @@ import { FaPlus } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function NewTodo({
-  dueDate,
-  user,
-  setDueDate,
-  fetchData,
-  refreshTodoList,
-}) {
+export default function NewTodo({ user, setDueDate, dueDate, fetchData }) {
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
   const text = useRef(null);
 
@@ -48,7 +42,6 @@ export default function NewTodo({
       fetchData(userId);
       text.current.value = "";
       setDueDate(null);
-      refreshTodoList(userId);
       console.log("Document written with ID:", docRef.id);
 
       onClose();
