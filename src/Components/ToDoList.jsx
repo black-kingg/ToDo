@@ -86,7 +86,7 @@ function ToDoList({ user, setUser }) {
 
   return (
     <>
-      <div className="bg-gray-200 w-4/5 h-screen">
+      <div className="bg-gray-200 w-5/6 h-screen">
         <Navbar />
         <div className=" justify-center items-center">
           <div className="flex flex-wrap px-5 md:px-0 lg:px-10 relative md:w-[100%] gap-3 md:gap-4 lg:gap-10">

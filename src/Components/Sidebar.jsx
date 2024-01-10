@@ -5,7 +5,7 @@ import NewTodo from "./NewTodo";
 
 export default function Sidebar({ user, setUser, fetchData, setDueDate }) {
   return (
-    <div className="bg-neutral-900 text-white w-1/5 h-screen top-0 left-0 p-4 flex flex-col place-content-between">
+    <div className="bg-neutral-900 text-white w-1/6 h-screen top-0 left-0 p-4 flex flex-col place-content-between">
       <div className="mb-6 space-y-20">
         <p className="text-3xl ">TODO</p>
         <div className="space-y-3">

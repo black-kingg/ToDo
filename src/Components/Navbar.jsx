@@ -19,7 +19,7 @@ const Navbar = () => {
       <div className="absolute top-3 right-5">
         <button
           onClick={handleLogout}
-          className=" bg-green-500 text-white py-2 px-4 rounded"
+          className=" bg-indigo-800 text-white py-2 px-4 rounded"
         >
           Log Out
         </button>
