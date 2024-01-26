@@ -91,6 +91,10 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
     }
   });
 
+  const sortedGroups = Array.from(groupedTodoMap).sort(
+    ([dateA], [dateB]) => new Date(dateA) - new Date(dateB)
+  );
+
   return (
     <>
       <div className="bg-neutral-900 text-gray-300 w-[88%] h-screen">
@@ -101,13 +105,13 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
               Welcome, {user ? user.email : "Guest"}
             </p>
 
-            <div className="flex flex-wrap px-5 md:px-0 lg:px-10 relative md:w-[100%] gap-3 md:gap-4 lg:gap-10">
-              {Array.from(groupedTodoMap).map(([dueDateKey, todos]) => (
+            <div className="flex px-5 md:px-0 lg:px-10 relative w-10/12 h-auto gap-3 md:gap-4 lg:gap-10 overflow-x-auto hideScroll">
+              {sortedGroups.map(([dueDateKey, todos]) => (
                 <div
                   key={dueDateKey}
-                  className="flex flex-col w-[48%] md:w-[40%] lg:w-[22%] mt-16 md:mt-10 gap-4"
+                  className="flex flex-col min-w-[20%] md:w-[40%] lg:w-[22%] mt-16 md:mt-10 gap-4"
                 >
-                  <div className="bg-neutral-600 rounded-lg p-5 hover:border-gray-300 shadow-md hover:shadow-none">
+                  <div className=" px-3 hover:border-gray-300 shadow-md hover:shadow-none">
                     <span className="text-gray-100">
                       {formatDate(todos[0].dueDate)}
                     </span>
@@ -119,7 +123,6 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
                     >
                       <span className="flex flex-col space-y-2 text-gray-100">
                         <span>{todo.text}</span>
-                        {/* You can display other todo details here */}
                       </span>
                       <MdDeleteSweep
                         size={20}
