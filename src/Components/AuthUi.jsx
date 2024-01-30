@@ -47,8 +47,11 @@ export default function AuthUi({
       >
         <div className={`w-screen rounded-2xl overflow-hidden`}>
           {currentSlide === 0 && (
-            <div className="">
+            <div>
               <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-8">
+                <p className="text-indigo-800 text-[2.2rem] max-sm:text-[1.7rem] font-bold mb-7">
+                  Create your Account
+                </p>
                 <div className="space-y-6 w-[30%]">
                   <input
                     type="email"
@@ -65,21 +68,22 @@ export default function AuthUi({
                     className="block w-full rounded-md border-0 px-5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
-
                 <button
                   onClick={handleSignup}
-                  className="mt-2 bg-pink-500 text-white py-2 px-4 rounded"
+                  className="mt-7 bg-neutral-500 hover:bg-neutral-700 text-white py-2 px-4 rounded"
                 >
                   Sign Up
                 </button>
-
                 {error && <p className="text-red-500 mt-2">{error}</p>}
               </div>
             </div>
           )}
           {currentSlide === 1 && (
-            <div className="">
+            <div>
               <div className="flex flex-col justify-center items-center px-6 py-12 lg:px-8">
+                <p className="text-indigo-800 text-[2.2rem] max-sm:text-[1.7rem] font-bold mb-7">
+                  Log Into your Account
+                </p>
                 <div className="space-y-6 w-[30%]">
                   <input
                     type="email"
@@ -101,7 +105,7 @@ export default function AuthUi({
 
                 <button
                   onClick={handleSignin}
-                  className="mt-2 bg-green-500 text-white py-2 px-4 rounded"
+                  className="mt-7 bg-neutral-500 hover:bg-neutral-700 text-white py-2 px-4 rounded"
                 >
                   Sign In
                 </button>

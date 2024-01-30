@@ -105,11 +105,11 @@ function ToDoList({ user, setUser, todoList, setTodoList }) {
               Welcome, {user ? user.email : "Guest"}
             </p>
 
-            <div className="flex px-5 md:px-0 lg:px-10 relative w-10/12 h-auto gap-3 md:gap-4 lg:gap-10 overflow-x-auto hideScroll">
+            <div className="flex px-5 md:px-0 lg:px-10 relative w-11/12 h-auto gap-3 md:gap-4 lg:gap-10 overflow-x-auto hideScroll">
               {sortedGroups.map(([dueDateKey, todos]) => (
                 <div
                   key={dueDateKey}
-                  className="flex flex-col min-w-[20%] md:w-[40%] lg:w-[22%] mt-16 md:mt-10 gap-4"
+                  className="flex flex-col min-w-[17%] md:w-[40%] lg:w-[22%] mt-16 md:mt-10 gap-4"
                 >
                   <div className=" px-3 hover:border-gray-300 shadow-md hover:shadow-none">
                     <span className="text-gray-100">
